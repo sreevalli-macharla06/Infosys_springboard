@@ -1,0 +1,3148 @@
+<USER_REQUEST>
+You are now working on Milestone 3 of my AI-Assisted Threat Detection Dashboard.
+
+IMPORTANT CONTEXT:
+- Milestone 1 is completed.
+- Milestone 2 is completed and working.
+- I am doing Milestone 3 SOLO, so do not assume a team, parallel developers, or separate ownership of frontend/backend.
+- I will provide you with a file called `Milestone_3_Design.md`. This is the project-specific design specification for M3.
+- The existing M2 application is the foundation. DO NOT rebuild, replace, retrain, or unnecessarily modify M1/M2 functionality.
+
+YOUR TASK RIGHT NOW:
+DO NOT IMPLEMENT ANYTHING YET.
+
+First, perform a complete inspection/audit of the existing project and compare it against `Milestone_3_Design.md`.
+
+I want you to understand the existing system before writing code.
+
+INSPECT:
+
+1. PROJECT STRUCTURE
+- Backend structure
+- Frontend structure
+- Existing services
+- Existing routes/APIs
+- Existing models/schemas
+- Existing MongoDB/database code
+- Existing utilities/helpers
+- Existing React pages/components
+- Existing API integration
+
+2. MILESTONE 2
+Identify exactly:
+- How M2 predictions are generated
+- Where prediction data is stored
+- Existing MongoDB collections
+- Existing security event schema
+- Existing prediction schema
+- Existing API endpoints
+- Existing frontend data flow
+
+3. M2 DATASETS
+Verify how the existing project accesses:
+- security_events
+- assets
+- vulnerabilities
+- threat_intelligence
+- mitre_attack_mapping
+
+Pay particular attention to actual field names and relationships.
+
+IMPORTANT KNOWN M2 DETAIL:
+`security_events.vulnerability_id` contains CVE identifiers such as `CVE-2023-1234`, while the vulnerability dataset also has a `cve_id` field. Do NOT assume `vulnerability_id` directly joins to the vulnerability table's primary `vulnerability_id`. Verify the actual implementation/data before making any changes.
+
+Also verify:
+- asset_name → assets.asset_name relationship
+- technique_id → mitre_attack_mapping.mitre_id relationship
+- source_ip/destination_ip → threat intelligence indicators
+
+4. M3 GAP ANALYSIS
+Compare the existing project with every requirement in `Milestone_3_Design.md`.
+
+Create a clear table:
+
+Requirement | Already Exists | Needs Modification | Needs New Implementation | Notes
+
+Cover:
+- Asset criticality enrichment
+- CVE/CVSS enrichment
+- MITRE enrichment
+- IOC/threat intelligence enrichment
+- Risk Score Engine
+- Risk normalization
+- Risk levels
+- Priority
+- Event correlation
+- Attack-chain detection
+- Explainable risk breakdown
+- Recommendations
+- Incident creation
+- MongoDB incidents collection
+- Incident lifecycle
+- 7 M3 APIs
+- Risk Overview
+- Priority Incidents
+- Incident Investigation
+- Attack Chain screen
+- Security Intelligence
+- Filters/sorting
+- Testing
+
+5. ARCHITECTURE RECOMMENDATION
+After inspection, explain where M3 should fit into the EXISTING M2 architecture.
+
+Show the proposed flow clearly:
+
+M2 Prediction
+→ Enrichment
+→ Correlation
+→ Risk Score
+→ Risk Level/Priority
+→ Attack Chain
+→ Recommendations
+→ Incident
+→ MongoDB
+→ FastAPI
+→ React
+
+Do not create duplicate services if an existing M2 service can safely be extended.
+
+6. FILE-LEVEL PLAN
+Give me a proposed list of:
+- Existing files that should be modified
+- New files that should be created
+- Files that should NOT be touched
+
+For every proposed modification, briefly explain why.
+
+7. RISKS / CONFLICTS
+Identify anything in the current M2 implementation that could conflict with M3.
+
+Examples:
+- Existing API naming conflicts
+- Schema conflicts
+- MongoDB collection conflicts
+- Frontend routing conflicts
+- Field mismatches
+- Existing logic that should be reused
+- Anything that could break M2 regression compatibility
+
+8. IMPLEMENTATION ORDER
+Give me the safest SOLO development sequence after the audit.
+
+It should generally follow:
+
+Design verification
+→ Data/enrichment layer
+→ Risk engine
+→ Risk tests
+→ Correlation
+→ Attack chains
+→ Recommendations
+→ Incidents/MongoDB
+→ APIs
+→ Frontend
+→ End-to-end testing
+
+But adapt this if your inspection shows a better order.
+
+IMPORTANT RULES:
+- Do not write implementation code yet.
+- Do not modify files yet.
+- Do not delete existing functionality.
+- Do not replace the M2 models.
+- Do not retrain the M2 models.
+- Do not create fake/sample data when real M2 data already exists.
+- Do not invent field names; verify them from the actual code/data.
+- Do not assume the M3 design perfectly matches the current code; identify differences.
+- Preserve all working M1/M2 APIs unless a change is genuinely required.
+- Prefer small, clean extensions over large refactors.
+- Keep the architecture understandable for a solo developer.
+- Do not add unnecessary technologies or services.
+- Do not implement optional/polish features before mandatory M3 functionality.
+
+READ `Milestone_3_Design.md` completely before making your assessment.
+
+FINAL RESPONSE FORMAT:
+
+# M3 Pre-Implementation Audit
+
+## 1. Current M2 Architecture
+[summary]
+
+## 2. M2 Data & Schemas
+[actual findings]
+
+## 3. M3 Gap Analysis
+[table]
+
+## 4. Proposed M3 Architecture
+[flow]
+
+## 5. Files to Modify
+[list + reason]
+
+## 6. Files to Create
+[list + reason]
+
+## 7. Files to Leave Untouched
+[list + reason]
+
+## 8. Risks / Conflicts
+[list]
+
+## 9. Recommended Solo Implementation Order
+[numbered sequence]
+
+## 10. Final Recommendation
+Tell me whether the project is ready to begin M3 implementation and what the FIRST implementation task should be.
+
+STOP AFTER THIS AUDIT.
+DO NOT IMPLEMENT ANYTHING UNTIL I REVIEW YOUR AUDIT AND GIVE YOU APPROVAL.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T21:28:58+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.7 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+<USER_REQUEST>
+MILESTONE 3 — IMPLEMENTATION PHASE 1
+Foundation, Enrichment, Risk Engine & Prioritization
+
+You have already completed the M3 pre-implementation audit of this project. Your audit is approved.
+
+Now begin implementation.
+
+IMPORTANT:
+- This is a SOLO project.
+- `Milestone_3_Design.txt` is the master M3 specification.
+- Preserve all working M1 and M2 functionality.
+- Do not retrain, replace, or modify the M2 ML models.
+- Do not rewrite the existing application architecture unnecessarily.
+- Reuse existing M2 data-access patterns and utilities wherever appropriate.
+- Do not create fake datasets because the real M2 datasets already exist.
+- Work carefully from the actual codebase and verified schemas from your audit.
+- Do not stop after creating empty scaffolding. Implement working functionality and test it.
+
+SCOPE OF THIS PHASE ONLY:
+
+Build the complete M3 foundation through Risk Score + Prioritization.
+
+==================================================
+1. FREEZE THE M3 CONTRACT
+==================================================
+
+Before implementation, use `Milestone_3_Design.txt` and your audit to establish the exact internal data structures for:
+
+- enrichment result
+- risk breakdown
+- risk result
+- prioritization result
+
+Do not create unnecessary schemas.
+
+The schemas must accurately represent the actual M2 data and the M3 design.
+
+==================================================
+2. THREAT ENRICHMENT
+==================================================
+
+Implement the M3 enrichment layer.
+
+It must resolve:
+
+A. Asset
+- Match security_events.asset_name → assets.asset_name
+- Extract asset_id, asset_type, owner, department, criticality, operating_system
+- Normalize criticality:
+  Critical = 100
+  High = 75
+  Medium = 50
+  Low = 25
+
+B. Vulnerability / CVE
+- security_events.vulnerability_id contains CVE identifiers.
+- Match it against vulnerabilities.cve_id.
+- Do NOT match it directly against vulnerabilities.vulnerability_id.
+- Extract CVE, vulnerability name, severity, CVSS, affected asset, patch status.
+- If lookup fails, use the event's existing cvss_score as fallback.
+- Normalize CVSS as cvss_score × 10, clamped to 0–100.
+
+C. MITRE
+- Use existing technique_id → mitre_attack_mapping.mitre_id relationship.
+- Return MITRE ID, technique name and tactic.
+
+D. Threat Intelligence / IOC
+- Check source_ip and destination_ip against threat_intelligence.indicator_value.
+- When matched, return IOC information including indicator type, threat name, threat actor, confidence and severity.
+- Use deterministic TI scoring:
+  malicious/critical = 100
+  high = 80
+  medium = 60
+  low = 40
+  no match = 0
+- Never fabricate an IOC match.
+
+The enrichment layer should clearly indicate whether each enrichment was found, missing, or fallback-derived.
+
+==================================================
+3. RISK SCORE ENGINE
+==================================================
+
+Implement the mentor's five-factor risk formula:
+
+Risk Score =
+    Threat Severity × 0.25
+  + ML Confidence × 0.25
+  + Asset Criticality × 0.20
+  + Vulnerability CVSS × 0.20
+  + Threat Intelligence × 0.10
+
+All inputs must be normalized to 0–100.
+
+Severity:
+
+Critical = 100
+High = 75
+Medium = 50
+Low = 25
+
+ML confidence:
+Use the actual M2 confidence_score.
+
+Asset criticality:
+Use the normalized asset values above.
+
+Vulnerability:
+CVSS × 10.
+
+Threat intelligence:
+Use the deterministic IOC mapping from the design.
+
+Round the final result to an integer and clamp it to 0–100.
+
+IMPORTANT:
+The risk score is a composite prioritization score.
+Do NOT describe it as a calibrated probability of attack.
+
+==================================================
+4. RISK BREAKDOWN / EXPLAINABILITY
+==================================================
+
+Every risk calculation must expose:
+
+- factor name
+- normalized value
+- weight
+- weighted contribution
+
+For example:
+
+threat_severity:
+  value
+  weight
+  contribution
+
+ml_confidence:
+  value
+  weight
+  contribution
+
+etc.
+
+Also generate human-readable reasons based ONLY on actual signals.
+
+Examples:
+
+- Critical asset
+- High ML confidence
+- Critical CVSS vulnerability
+- Malicious IOC detected
+
+Do not generate reasons that are unsupported by the data.
+
+==================================================
+5. RISK LEVEL
+==================================================
+
+Implement exactly:
+
+0–20   → Low
+21–40  → Medium
+41–60  → Moderate
+61–80  → High
+81–100 → Critical
+
+==================================================
+6. PRIORITY
+==================================================
+
+Implement deterministic priority mapping consistent with the design.
+
+Use:
+
+Low      → LOW
+Medium   → MEDIUM
+Moderate → HIGH
+High     → HIGH / IMMEDIATE
+Critical → CRITICAL / IMMEDIATE
+
+Use one consistent representation throughout the backend.
+
+==================================================
+7. TESTING
+==================================================
+
+Create proper tests for the risk engine.
+
+At minimum test:
+
+- all-zero inputs
+- low-risk case
+- high-risk case
+- critical case
+- score never below 0
+- score never above 100
+- correct weighted contributions
+- correct risk-level boundaries
+- correct priority mapping
+- missing asset
+- missing CVE
+- missing IOC
+- matched IOC
+- MITRE lookup
+
+Also implement the mentor acceptance calculation:
+
+Threat Severity = 90
+ML Confidence = 91
+Asset Criticality = 100
+CVSS = 98
+Threat Intelligence = 80
+
+Expected:
+
+(90 × 0.25)
++ (91 × 0.25)
++ (100 × 0.20)
++ (98 × 0.20)
++ (80 × 0.10)
+
+= 92.85
+≈ 93
+
+The test must verify 93.
+
+==================================================
+8. CODE QUALITY
+==================================================
+
+- Follow the existing project's coding conventions.
+- Keep functions small and understandable.
+- Avoid duplicate MongoDB connection logic.
+- Reuse the existing MongoDB client/data-access mechanisms.
+- Avoid unnecessary dependencies.
+- Add useful type hints/docstrings where appropriate.
+- Do not modify M1/M2 routes or ML logic unless absolutely required.
+- Do not implement frontend work in this phase.
+- Do not implement incident generation or APIs in this phase.
+
+==================================================
+9. VALIDATION BEFORE FINISHING
+==================================================
+
+After implementation:
+
+1. Run all new M3 tests.
+2. Run the existing M1/M2 tests/validation available in the project.
+3. Verify imports.
+4. Verify MongoDB access.
+5. Verify enrichment against real data.
+6. Verify the risk formula against real records.
+7. Confirm no M2 files/models/routes were unnecessarily changed.
+
+At the end, provide a concise implementation report:
+
+- Files created
+- Files modified
+- What was implemented
+- Tests executed + results
+- Any issues discovered
+- Any deviations from `Milestone_3_Design.txt`
+- Recommended next phase
+
+IMPORTANT:
+Do not move on to correlation, incidents, APIs, or frontend in this prompt.
+Complete and validate this foundation first.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T21:46:02+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Gemini 3.7 Flash (High) to Claude Opus 4.6 (Thinking). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+<USER_REQUEST>
+MILESTONE 3 — IMPLEMENTATION PHASE 1
+Foundation, Enrichment, Risk Engine & Prioritization
+
+You have already completed the M3 pre-implementation audit of this project. Your audit is approved.
+
+Now begin implementation.
+
+IMPORTANT:
+- This is a SOLO project.
+- `Milestone_3_Design.txt` is the master M3 specification.
+- Preserve all working M1 and M2 functionality.
+- Do not retrain, replace, or modify the M2 ML models.
+- Do not rewrite the existing application architecture unnecessarily.
+- Reuse existing M2 data-access patterns and utilities wherever appropriate.
+- Do not create fake datasets because the real M2 datasets already exist.
+- Work carefully from the actual codebase and verified schemas from your audit.
+- Do not stop after creating empty scaffolding. Implement working functionality and test it.
+
+SCOPE OF THIS PHASE ONLY:
+
+Build the complete M3 foundation through Risk Score + Prioritization.
+
+==================================================
+1. FREEZE THE M3 CONTRACT
+==================================================
+
+Before implementation, use `Milestone_3_Design.txt` and your audit to establish the exact internal data structures for:
+
+- enrichment result
+- risk breakdown
+- risk result
+- prioritization result
+
+Do not create unnecessary schemas.
+
+The schemas must accurately represent the actual M2 data and the M3 design.
+
+==================================================
+2. THREAT ENRICHMENT
+==================================================
+
+Implement the M3 enrichment layer.
+
+It must resolve:
+
+A. Asset
+- Match security_events.asset_name → assets.asset_name
+- Extract asset_id, asset_type, owner, department, criticality, operating_system
+- Normalize criticality:
+  Critical = 100
+  High = 75
+  Medium = 50
+  Low = 25
+
+B. Vulnerability / CVE
+- security_events.vulnerability_id contains CVE identifiers.
+- Match it against vulnerabilities.cve_id.
+- Do NOT match it directly against vulnerabilities.vulnerability_id.
+- Extract CVE, vulnerability name, severity, CVSS, affected asset, patch status.
+- If lookup fails, use the event's existing cvss_score as fallback.
+- Normalize CVSS as cvss_score × 10, clamped to 0–100.
+
+C. MITRE
+- Use existing technique_id → mitre_attack_mapping.mitre_id relationship.
+- Return MITRE ID, technique name and tactic.
+
+D. Threat Intelligence / IOC
+- Check source_ip and destination_ip against threat_intelligence.indicator_value.
+- When matched, return IOC information including indicator type, threat name, threat actor, confidence and severity.
+- Use deterministic TI scoring:
+  malicious/critical = 100
+  high = 80
+  medium = 60
+  low = 40
+  no match = 0
+- Never fabricate an IOC match.
+
+The enrichment layer should clearly indicate whether each enrichment was found, missing, or fallback-derived.
+
+==================================================
+3. RISK SCORE ENGINE
+==================================================
+
+Implement the mentor's five-factor risk formula:
+
+Risk Score =
+    Threat Severity × 0.25
+  + ML Confidence × 0.25
+  + Asset Criticality × 0.20
+  + Vulnerability CVSS × 0.20
+  + Threat Intelligence × 0.10
+
+All inputs must be normalized to 0–100.
+
+Severity:
+
+Critical = 100
+High = 75
+Medium = 50
+Low = 25
+
+ML confidence:
+Use the actual M2 confidence_score.
+
+Asset criticality:
+Use the normalized asset values above.
+
+Vulnerability:
+CVSS × 10.
+
+Threat intelligence:
+Use the deterministic IOC mapping from the design.
+
+Round the final result to an integer and clamp it to 0–100.
+
+IMPORTANT:
+The risk score is a composite prioritization score.
+Do NOT describe it as a calibrated probability of attack.
+
+==================================================
+4. RISK BREAKDOWN / EXPLAINABILITY
+==================================================
+
+Every risk calculation must expose:
+
+- factor name
+- normalized value
+- weight
+- weighted contribution
+
+For example:
+
+threat_severity:
+  value
+  weight
+  contribution
+
+ml_confidence:
+  value
+  weight
+  contribution
+
+etc.
+
+Also generate human-readable reasons based ONLY on actual signals.
+
+Examples:
+
+- Critical asset
+- High ML confidence
+- Critical CVSS vulnerability
+- Malicious IOC detected
+
+Do not generate reasons that are unsupported by the data.
+
+==================================================
+5. RISK LEVEL
+==================================================
+
+Implement exactly:
+
+0–20   → Low
+21–40  → Medium
+41–60  → Moderate
+61–80  → High
+81–100 → Critical
+
+==================================================
+6. PRIORITY
+==================================================
+
+Implement deterministic priority mapping consistent with the design.
+
+Use:
+
+Low      → LOW
+Medium   → MEDIUM
+Moderate → HIGH
+High     → HIGH / IMMEDIATE
+Critical → CRITICAL / IMMEDIATE
+
+Use one consistent representation throughout the backend.
+
+==================================================
+7. TESTING
+==================================================
+
+Create proper tests for the risk engine.
+
+At minimum test:
+
+- all-zero inputs
+- low-risk case
+- high-risk case
+- critical case
+- score never below 0
+- score never above 100
+- correct weighted contributions
+- correct risk-level boundaries
+- correct priority mapping
+- missing asset
+- missing CVE
+- missing IOC
+- matched IOC
+- MITRE lookup
+
+Also implement the mentor acceptance calculation:
+
+Threat Severity = 90
+ML Confidence = 91
+Asset Criticality = 100
+CVSS = 98
+Threat Intelligence = 80
+
+Expected:
+
+(90 × 0.25)
++ (91 × 0.25)
++ (100 × 0.20)
++ (98 × 0.20)
++ (80 × 0.10)
+
+= 92.85
+≈ 93
+
+The test must verify 93.
+
+==================================================
+8. CODE QUALITY
+==================================================
+
+- Follow the existing project's coding conventions.
+- Keep functions small and understandable.
+- Avoid duplicate MongoDB connection logic.
+- Reuse the existing MongoDB client/data-access mechanisms.
+- Avoid unnecessary dependencies.
+- Add useful type hints/docstrings where appropriate.
+- Do not modify M1/M2 routes or ML logic unless absolutely required.
+- Do not implement frontend work in this phase.
+- Do not implement incident generation or APIs in this phase.
+
+==================================================
+9. VALIDATION BEFORE FINISHING
+==================================================
+
+After implementation:
+
+1. Run all new M3 tests.
+2. Run the existing M1/M2 tests/validation available in the project.
+3. Verify imports.
+4. Verify MongoDB access.
+5. Verify enrichment against real data.
+6. Verify the risk formula against real records.
+7. Confirm no M2 files/models/routes were unnecessarily changed.
+
+At the end, provide a concise implementation report:
+
+- Files created
+- Files modified
+- What was implemented
+- Tests executed + results
+- Any issues discovered
+- Any deviations from `Milestone_3_Design.txt`
+- Recommended next phase
+
+IMPORTANT:
+Do not move on to correlation, incidents, APIs, or frontend in this prompt.
+Complete and validate this foundation first.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T21:47:16+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Claude Opus 4.6 (Thinking) to GPT-OSS 120B (Medium). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+Comments on artifact URI: file:///c%3A/Users/shubh/.gemini/antigravity/brain/8186dbd0-1162-43c1-8966-459a940dcf5e/implementation_plan.md
+
+The user has approved this document.
+
+
+<USER_REQUEST>
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T21:48:48+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+Phase 1 implementation is approved.
+
+Before we move to Phase 2, perform verification only.
+
+1. Run:
+   pytest -q tests/test_risk_engine.py
+
+2. Run the existing M1/M2 test or validation suite available in the project to confirm no regression.
+
+3. If any test fails, diagnose and fix only the Phase 1 issue causing it.
+
+4. Verify that:
+   - mentor acceptance test produces 93
+   - risk boundaries 20/40/60/80 are correct
+   - missing enrichment is handled safely
+   - M1/M2 APIs and ML files remain unchanged
+
+5. Report exact test results and any files changed.
+
+Do not begin Phase 2 yet.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T21:55:03+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+Phase 1 implementation is approved.
+
+Before we move to Phase 2, perform verification only.
+
+1. Run:
+   pytest -q tests/test_risk_engine.py
+
+2. Run the existing M1/M2 test or validation suite available in the project to confirm no regression.
+
+3. If any test fails, diagnose and fix only the Phase 1 issue causing it.
+
+4. Verify that:
+   - mentor acceptance test produces 93
+   - risk boundaries 20/40/60/80 are correct
+   - missing enrichment is handled safely
+   - M1/M2 APIs and ML files remain unchanged
+
+5. Report exact test results and any files changed.
+
+Do not begin Phase 2 yet.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T22:08:00+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from GPT-OSS 120B (Medium) to Gemini 3.7 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+<USER_REQUEST>
+MILESTONE 3 — PHASE 2 IMPLEMENTATION
+Correlation → Attack Chains → Recommendations → Incidents → MongoDB → APIs
+
+PHASE 1 IS APPROVED AND VERIFIED.
+
+Phase 1 currently has:
+- M3 Pydantic schemas
+- Asset/CVE/MITRE/IOC enrichment
+- 5-factor deterministic risk scoring
+- Risk breakdown/explainability
+- Risk levels
+- Priority mapping
+- Passing Phase 1 tests
+- M1/M2 regression checks passing
+
+Now implement the COMPLETE M3 BACKEND from correlation through REST APIs.
+
+IMPORTANT:
+- This is a SOLO project.
+- `Milestone_3_Design.txt` remains the master specification.
+- Your previous M3 audit is the architectural baseline.
+- Preserve all working M1/M2 functionality.
+- DO NOT retrain, replace, or modify the M2 ML models.
+- DO NOT modify the existing M1/M2 prediction logic unless absolutely required for integration.
+- DO NOT delete or restructure existing MongoDB collections.
+- DO NOT create fake datasets when the real M2 datasets already exist.
+- Reuse existing MongoDB connection/data-access patterns.
+- Prefer extending the current architecture over creating duplicate systems.
+- Implement real working functionality, not placeholders.
+- Test each major backend subsystem before moving on.
+- Do NOT begin frontend work in this phase.
+
+The goal is:
+
+M2 Prediction
+→ M3 Enrichment
+→ Event Correlation
+→ Risk Score
+→ Risk Level/Priority
+→ Attack Chain Detection
+→ Recommendations
+→ Incident Creation
+→ MongoDB
+→ 7 M3 APIs
+
+==================================================
+PHASE 2A — EVENT CORRELATION
+==================================================
+
+Create the correlation engine in:
+
+BACKEND/risk/correlation.py
+
+Use a configurable default time window of 15 minutes.
+
+The mentor's recommended correlation window is approximately 5–30 minutes, so keep the implementation configurable rather than hardcoding the architecture around one value.
+
+Correlate events using meaningful shared context such as:
+
+- username
+- source_ip
+- destination_ip
+- asset_name
+- asset_id where available
+- event_type
+- MITRE technique
+- tactic
+- timestamp
+
+Do NOT correlate everything with everything.
+
+A relationship should require meaningful shared context AND temporal proximity.
+
+The engine should return:
+
+- related event IDs
+- related event count
+- correlation keys/reasons
+- chronological ordering
+- correlation time window
+
+Avoid O(N²) processing across all 10,000 events.
+
+Use efficient MongoDB queries, indexed fields, timestamp filtering, grouping, or sliding-window logic where appropriate.
+
+The implementation must work against the REAL M2 MongoDB data.
+
+==================================================
+PHASE 2B — ATTACK CHAIN DETECTION
+==================================================
+
+Extend the correlation engine to identify recognizable attack chains.
+
+At minimum implement these three patterns:
+
+1. BRUTE FORCE
+
+Failed Login
+→ repeated failed login / brute force activity
+→ Successful Login
+
+2. PRIVILEGE ESCALATION
+
+Initial Access
+→ Privilege Escalation
+→ Administrative Activity
+
+3. DATA EXFILTRATION
+
+Suspicious Login
+→ Lateral Movement
+→ Large Data Transfer
+→ External Destination
+
+Use actual event fields/event types available in this project.
+
+IMPORTANT:
+Do not assume that the dataset contains exact event names from the design document.
+
+First inspect the actual 10 event types and their fields, then map the canonical patterns to the closest real event types.
+
+Document the mapping clearly.
+
+Do NOT fabricate attack-chain stages.
+
+The output should contain:
+
+{
+    "attack_chain_detected": true/false,
+    "attack_chain_type": "...",
+    "stages": [...],
+    "event_ids": [...],
+    "timeline": [...]
+}
+
+When no valid chain exists:
+
+attack_chain_detected = false
+
+==================================================
+PHASE 2C — CORRELATION CONTEXT
+==================================================
+
+Correlation must provide additional security context.
+
+Do NOT blindly add points for every related event.
+
+The base five-factor risk formula from Phase 1 remains the authoritative risk calculation.
+
+If a correlation/attack-chain risk adjustment is introduced:
+
+- keep it small
+- make it deterministic
+- document it
+- cap it
+- ensure the base five-factor score remains visible separately
+
+Prefer treating correlation as an incident-level prioritization/context signal rather than silently changing the original M2 risk factors.
+
+For the first implementation, it is acceptable for:
+
+Base Risk Score
++
+Correlation / attack-chain context
+→ Incident Priority
+
+without modifying the base score.
+
+==================================================
+PHASE 2D — RESPONSE RECOMMENDATIONS
+==================================================
+
+Create:
+
+BACKEND/risk/recommendations.py
+
+Implement advisory-only recommendations.
+
+Recommendations must be based on actual detected threat type and/or attack chain.
+
+At minimum support:
+
+BRUTE FORCE:
+- Investigate source IP
+- Review authentication logs
+- Investigate affected account
+- Consider temporary account lock
+- Enable MFA where applicable
+
+MALWARE / RANSOMWARE:
+- Investigate affected endpoint
+- Run malware scan
+- Investigate file hash
+- Review related processes
+
+DATA EXFILTRATION:
+- Investigate destination IP/domain
+- Review data transfer logs
+- Investigate affected asset
+- Escalate for further investigation
+
+PRIVILEGE ESCALATION:
+- Review elevated privileges
+- Review administrative activity
+- Check persistence mechanisms
+- Investigate affected system
+
+Recommendations are advisory.
+
+NEVER automatically:
+- block an IP
+- disable an account
+- isolate a host
+- delete files
+- perform destructive security actions
+
+Return structured recommendation objects where useful:
+
+{
+    "action": "...",
+    "reason": "...",
+    "priority": "..."
+}
+
+Do not generate unsupported recommendations.
+
+==================================================
+PHASE 2E — INCIDENT SCHEMA
+==================================================
+
+Create:
+
+BACKEND/database/incident_repository.py
+
+Create a NEW MongoDB collection:
+
+incidents
+
+Do NOT modify or overwrite:
+
+incident_history
+
+Do NOT modify:
+- security_events
+- threat_predictions
+- assets
+- vulnerabilities
+- threat_intelligence
+- mitre_attack_mapping
+
+The incident document should follow the approved M3 design and include, at minimum:
+
+{
+    "incident_id": "INC-000001",
+    "event_ids": [],
+    "threat_type": "...",
+    "risk_score": 93,
+    "risk_level": "Critical",
+    "priority": "CRITICAL_IMMEDIATE",
+    "asset_id": "...",
+    "asset_name": "...",
+    "affected_user": "...",
+    "ml_confidence": 91,
+    "anomaly_score": -0.72,
+    "cvss_score": 9.8,
+    "ioc_status": "...",
+    "threat_actor": "...",
+    "mitre_techniques": [],
+    "related_events_count": 5,
+    "attack_chain_detected": true,
+    "attack_chain_type": "...",
+    "risk_breakdown": {},
+    "reasons": [],
+    "recommendations": [],
+    "status": "Open",
+    "created_at": "ISO-8601 timestamp"
+}
+
+Use the actual project schemas/types where possible.
+
+Incident IDs must be unique and generated by the backend.
+
+==================================================
+PHASE 2F — MONGODB REPOSITORY
+==================================================
+
+Implement repository functions for:
+
+- create incident
+- get incident by ID
+- list incidents
+- get high-risk incidents
+- risk summary aggregation
+- attack chain retrieval
+- recommendations retrieval
+- status update
+
+Add sensible indexes for:
+
+- incident_id
+- risk_score
+- risk_level
+- priority
+- status
+- asset_id
+- created_at
+
+Do not create excessive indexes without reason.
+
+==================================================
+PHASE 2G — INCIDENT SERVICE
+==================================================
+
+Create:
+
+BACKEND/services/incident_service.py
+
+This should orchestrate the complete M3 incident pipeline.
+
+Given an M2 event/prediction:
+
+1. Load the M2 prediction
+2. Load the source security event
+3. Run M3 enrichment
+4. Correlate related events
+5. Detect attack chain
+6. Calculate Phase 1 base risk score
+7. Determine risk level
+8. Determine priority
+9. Generate explainable reasons
+10. Generate recommendations
+11. Create incident document
+12. Persist incident to MongoDB
+
+Do NOT duplicate the Phase 1 risk formula here.
+
+Import and reuse the Phase 1 risk engine.
+
+Keep the orchestration layer clean.
+
+==================================================
+PHASE 2H — INCIDENT POPULATION
+==================================================
+
+Create:
+
+BACKEND/populate_all_incidents.py
+
+This should generate M3 incidents from the existing M2 prediction data.
+
+IMPORTANT:
+- Use the real `threat_predictions` collection.
+- Use the real `security_events`.
+- Use real enrichment collections.
+- Do not create fake events.
+- Do not modify M2 prediction documents.
+
+Avoid blindly creating thousands of duplicate incidents.
+
+Implement deterministic/idempotent behavior.
+
+If an incident already exists for the same logical event/incident key, do not create a duplicate.
+
+Before running large batch processing, make sure the pipeline works correctly for a single real event.
+
+For batch processing, optimize queries and avoid opening a new MongoDB connection per event.
+
+==================================================
+PHASE 2I — INCIDENT LIFECYCLE
+==================================================
+
+Implement support for:
+
+Open
+Investigating
+Resolved
+False Positive
+
+Use a safe status update operation.
+
+Do not allow arbitrary invalid status values.
+
+If a status API is implemented, validate the new status with the Pydantic schema.
+
+==================================================
+PHASE 2J — M3 FASTAPI APIs
+==================================================
+
+Implement the 7 M3 API endpoints defined in the design.
+
+Use the `/api/v1` namespace.
+
+--------------------------------------------------
+1. POST /api/v1/risk/calculate
+--------------------------------------------------
+
+Request:
+
+{
+    "event_id": "EVT000001"
+}
+
+Load the actual M2 event/prediction.
+
+Run the M3 pipeline required for risk calculation.
+
+Return:
+
+{
+    "event_id": "...",
+    "risk_score": 93,
+    "risk_level": "Critical",
+    "priority": "CRITICAL_IMMEDIATE",
+    "risk_breakdown": {},
+    "reasons": [],
+    "related_events_count": 5,
+    "attack_chain": {}
+}
+
+Do not require the frontend to perform any risk calculations.
+
+--------------------------------------------------
+2. GET /api/v1/risk/high
+--------------------------------------------------
+
+Return high/critical risk incidents.
+
+Sort by:
+
+risk_score DESC
+
+Allow sensible filters if already supported by the architecture.
+
+--------------------------------------------------
+3. GET /api/v1/risk/summary
+--------------------------------------------------
+
+Return aggregate data suitable for the Risk Overview dashboard.
+
+Include at minimum:
+
+- total incidents
+- critical count
+- high count
+- moderate count
+- medium count
+- low count
+- open count
+- risk distribution
+
+Include trend data if it can be generated cleanly from created_at/timestamps.
+
+--------------------------------------------------
+4. GET /api/v1/incidents
+--------------------------------------------------
+
+Return prioritized incidents.
+
+Default sorting:
+
+risk_score DESC
+
+Support filters where practical:
+
+- risk_level
+- priority
+- threat_type
+- asset
+- department
+- status
+- date range
+
+Do not overcomplicate the API.
+
+--------------------------------------------------
+5. GET /api/v1/incidents/{incident_id}
+--------------------------------------------------
+
+Return the complete incident:
+
+- event information
+- risk score
+- risk level
+- priority
+- risk breakdown
+- reasons
+- asset information
+- CVE/CVSS
+- IOC
+- MITRE
+- related events
+- attack chain
+- recommendations
+- status
+
+--------------------------------------------------
+6. GET /api/v1/attack-chains
+--------------------------------------------------
+
+Return detected attack chains with:
+
+- chain ID or incident ID
+- chain type
+- ordered stages
+- ordered event IDs
+- timeline
+- affected asset where available
+- risk level/score where available
+
+--------------------------------------------------
+7. GET /api/v1/recommendations/{incident_id}
+--------------------------------------------------
+
+Return advisory recommendations for the requested incident.
+
+--------------------------------------------------
+OPTIONAL STATUS ENDPOINT
+--------------------------------------------------
+
+You may implement:
+
+PATCH /api/v1/incidents/{incident_id}/status
+
+because incident lifecycle is useful.
+
+This is an ADDITIONAL endpoint and does not replace any of the 7 required APIs.
+
+==================================================
+PHASE 2K — ROUTER REGISTRATION
+==================================================
+
+Create appropriate route modules, for example:
+
+BACKEND/routes/risk_routes.py
+BACKEND/routes/incident_routes.py
+BACKEND/routes/intelligence_routes.py
+
+Register them in the existing FastAPI application.
+
+Do not disturb existing M1/M2 routes.
+
+After registration, verify both old and new routes.
+
+==================================================
+PHASE 2L — API SCHEMA / ERROR HANDLING
+==================================================
+
+Use Pydantic request/response models where appropriate.
+
+Handle:
+
+- unknown event_id
+- unknown incident_id
+- missing data
+- malformed requests
+- invalid status
+- empty result sets
+- MongoDB errors
+
+Return sensible HTTP status codes.
+
+Do not expose stack traces to API clients.
+
+==================================================
+PHASE 2M — TESTING
+==================================================
+
+Create comprehensive M3 backend tests.
+
+At minimum cover:
+
+CORRELATION:
+- same user within 15 minutes
+- same source IP within 15 minutes
+- unrelated events
+- events outside correlation window
+
+ATTACK CHAINS:
+- Brute Force pattern
+- Privilege Escalation pattern
+- Data Exfiltration pattern
+- no valid chain
+
+RECOMMENDATIONS:
+- correct recommendation family for each supported threat type
+- no destructive automatic actions
+
+INCIDENTS:
+- incident creation
+- unique incident ID
+- required fields
+- duplicate prevention
+- status update
+- invalid status rejection
+
+RISK:
+- verify Phase 1 risk engine remains unchanged
+- verify enrichment is integrated correctly
+- verify mentor acceptance case still produces 93
+
+APIs:
+- POST risk calculation
+- high-risk endpoint
+- summary endpoint
+- incident list
+- incident detail
+- attack chains
+- recommendations
+- optional status endpoint
+
+REGRESSION:
+- existing M1 APIs
+- existing M2 APIs
+- existing ML artifacts
+- 10,000 security events
+- existing prediction documents
+
+==================================================
+PHASE 2N — REAL DATA VALIDATION
+==================================================
+
+Before declaring Phase 2 complete:
+
+1. Start the backend.
+2. Confirm MongoDB connection.
+3. Pick several REAL M2 predictions.
+4. Run them through the M3 pipeline.
+5. Verify enrichment values against actual MongoDB records.
+6. Verify risk calculations manually for at least one record.
+7. Generate incidents from real predictions.
+8. Query the new incidents collection.
+9. Call every M3 API.
+10. Confirm responses contain real data.
+11. Confirm M1/M2 APIs still work.
+12. Confirm no M2 model files changed.
+
+IMPORTANT:
+Do not merely test mocked objects and declare success.
+At least one complete path must be validated against the actual project MongoDB.
+
+==================================================
+PHASE 2O — PERFORMANCE / SAFETY
+==================================================
+
+The dataset has 10,000 security events.
+
+Do not implement an O(N²) all-events comparison.
+
+Use efficient filtering and indexing.
+
+Batch incident generation should be reasonably fast and should not repeatedly load entire CSV files into memory if MongoDB already contains the data.
+
+Do not create duplicate incidents on repeated execution.
+
+==================================================
+FINAL ACCEPTANCE SCENARIO
+==================================================
+
+Validate an end-to-end real/synthetic-supported scenario equivalent to the mentor's example:
+
+Event:
+- Threat Type: Brute Force
+- ML Confidence: 91
+- Threat Severity: 90
+- Critical Asset: 100
+- CVSS: 9.8 → 98
+- Malicious/High-confidence IOC: 80
+- Related suspicious events
+- MITRE T1110
+
+Base risk must remain:
+
+90×0.25
++ 91×0.25
++ 100×0.20
++ 98×0.20
++ 80×0.10
+
+= 92.85
+→ 93
+
+Expected:
+
+Risk Score = 93
+Risk Level = Critical
+Priority = CRITICAL_IMMEDIATE
+
+The incident should contain:
+
+- risk breakdown
+- reasons
+- enrichment
+- related events
+- attack chain where the real data supports it
+- recommendations
+- status Open
+
+Do not force real data to match the example if the dataset does not actually support a particular attack chain. The mathematical acceptance test and the real-data validation are separate requirements.
+
+==================================================
+IMPORTANT ARCHITECTURAL RULE
+==================================================
+
+The final architecture must remain:
+
+M2 Prediction
+    ↓
+M3 Enrichment
+    ↓
+Correlation
+    ↓
+Phase 1 Risk Engine
+    ↓
+Risk Level / Priority
+    ↓
+Attack Chain
+    ↓
+Recommendations
+    ↓
+Incident
+    ↓
+MongoDB
+    ↓
+FastAPI
+
+Do not move risk calculation into the frontend.
+
+Do not duplicate the risk formula inside API routes.
+
+Do not duplicate enrichment logic across multiple routes.
+
+Keep business logic in services/modules and keep routes thin.
+
+==================================================
+WHAT NOT TO DO
+==================================================
+
+- Do not implement frontend.
+- Do not modify M2 ML models.
+- Do not retrain M2.
+- Do not rewrite prediction_service.py.
+- Do not rewrite scoring_service.py.
+- Do not delete existing collections.
+- Do not replace incident_history.
+- Do not fabricate enrichment.
+- Do not fabricate attack chains.
+- Do not create duplicate incidents.
+- Do not automatically perform destructive security actions.
+- Do not add unnecessary dependencies.
+- Do not implement optional advanced features yet.
+
+==================================================
+FINAL REPORT
+==================================================
+
+When Phase 2 is complete, provide a concise but complete report containing:
+
+1. Files created
+2. Files modified
+3. Correlation implementation
+4. Attack-chain implementation
+5. Recommendation implementation
+6. Incident schema/repository
+7. Incident generation strategy
+8. APIs implemented
+9. Tests executed and exact results
+10. Real MongoDB validation results
+11. M1/M2 regression results
+12. Any issues discovered and fixes
+13. Any deviations from Milestone_3_Design.md
+14. Database collection/index summary
+15. Example real M3 incident response
+16. Whether Phase 2 is fully ready for frontend integration
+
+Do not begin frontend implementation after finishing this phase.
+
+Stop after the backend is fully implemented and validated so I can review the result before Phase 3.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T22:21:51+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+Phase 2 is almost approved. Before we move to frontend, perform a focused data-integrity audit only. Do not redesign or add features.
+
+Inspect several real incidents, including INC-000058, and verify:
+
+1. ATTACK CHAIN VALIDITY
+   Confirm that an attack chain is attached only when its stages actually belong to the same correlated attack context.
+   Specifically explain why INC-000058 has:
+   threat_type = Malware Detection
+   attack_chain_type = Brute Force Chain
+
+   If this is valid, explain the correlation evidence.
+   If it is not valid, fix the attack-chain association logic and update tests.
+
+2. EVENT COUNT CONSISTENCY
+   Explain the relationship between:
+   - event_ids length
+   - related_events_count
+   - attack_chain.event_ids length
+   - attack_chain stages
+
+   Make sure the semantics are intentional and documented.
+   If there is an inconsistency, fix it.
+
+3. ASSET ENRICHMENT
+   For incidents with a resolved asset, verify that asset_id and asset_name are both correctly populated from the assets collection.
+   Explain why INC-000058 has asset_id = null while asset_name = Firewall.
+   Fix only if this represents an actual enrichment bug.
+
+4. REAL-DATA SANITY CHECK
+   Inspect at least 10 real incidents and report:
+   - threat type
+   - risk score
+   - asset
+   - CVE/CVSS
+   - IOC
+   - MITRE
+   - attack chain
+   - related event count
+
+   Look specifically for obviously mismatched enrichment or attack chains.
+
+5. RE-RUN:
+   - pytest tests/
+   - validation/validate_phase2_live.py
+   - existing M1/M2 validation
+
+Do not begin frontend work.
+
+Report:
+- findings
+- fixes made, if any
+- exact test results
+- whether Phase 2 is now safe to approve for frontend integration.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T22:37:12+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+MILESTONE 3 — PHASE 3 IMPLEMENTATION
+Complete Frontend Integration
+
+PHASE 1 AND PHASE 2 ARE APPROVED.
+
+The M3 backend is now implemented and verified.
+
+Current verified state:
+- Phase 1: 7/7 risk-engine tests passed
+- Phase 2: 27/27 backend tests passed
+- Phase 2 live API validation: 27/27 passed
+- M1/M2 regression checks passed
+- Existing M2 ML models are intact
+- Existing M1/M2 functionality is intact
+- 588+ real M3 incidents exist in MongoDB
+- M3 REST APIs are working under /api/v1
+
+Now implement the COMPLETE M3 FRONTEND.
+
+IMPORTANT:
+- This is a SOLO project.
+- `Milestone_3_Design.md` remains the master M3 specification.
+- The existing M1/M2 frontend is already working and must be preserved.
+- Do NOT rebuild the frontend from scratch.
+- Do NOT replace the existing M2 dashboard.
+- Extend the existing React application cleanly.
+- Reuse the existing UI components, layout, styling system, API utilities and routing where appropriate.
+- Do not create duplicate API clients or duplicate components unnecessarily.
+- Do not put risk calculations/business logic inside React.
+- The backend is the single source of truth for M3 risk data.
+- Do not create fake/mock M3 data.
+- Use the actual working M3 APIs.
+- Do not modify backend logic unless a genuine frontend integration issue requires a minimal compatible change.
+- Do not modify M1/M2 ML logic.
+- Do not remove existing M1/M2 screens or functionality.
+
+The goal is:
+
+Existing M2 Dashboard
+        +
+M3 Risk Intelligence
+        ↓
+A unified security dashboard showing:
+Risk Overview
+Priority Incidents
+Incident Investigation
+Attack Chains
+Security Intelligence
+
+==================================================
+PHASE 3A — FIRST INSPECT THE EXISTING FRONTEND
+==================================================
+
+Before changing files, inspect the current React application.
+
+Identify:
+
+1. Frontend framework/build system
+2. Existing routes
+3. Existing pages/screens
+4. Existing layout/navigation
+5. Existing reusable components
+6. Existing charts
+7. Existing tables
+8. Existing API client/service layer
+9. Existing state management
+10. Existing styling/theme system
+11. Existing responsive behavior
+12. Existing dark/light mode behavior
+
+Pay particular attention to the existing M2 screens/components such as:
+
+- Dashboard
+- EventDetails
+- ThreatIntel
+- existing charts
+- existing navigation/sidebar
+- existing API utilities
+
+Do not duplicate functionality that already exists.
+
+After inspection, integrate M3 into the existing design language.
+
+==================================================
+PHASE 3B — FRONTEND API INTEGRATION
+==================================================
+
+Use the already-working M3 backend APIs.
+
+Required:
+
+GET /api/v1/risk/high
+GET /api/v1/risk/summary
+GET /api/v1/incidents
+GET /api/v1/incidents/{incident_id}
+GET /api/v1/attack-chains
+GET /api/v1/recommendations/{incident_id}
+
+Also support:
+
+POST /api/v1/risk/calculate
+
+And if the existing backend exposes the lifecycle endpoint:
+
+PATCH /api/v1/incidents/{incident_id}/status
+
+IMPORTANT:
+
+The frontend must NOT calculate:
+
+- risk score
+- risk level
+- priority
+- CVSS normalization
+- asset criticality
+- IOC score
+
+The frontend only consumes backend results.
+
+Create/reuse one clean API service layer.
+
+Handle:
+
+- loading
+- success
+- empty data
+- API errors
+- network errors
+
+Do not silently display fake data if an API fails.
+
+==================================================
+PHASE 3C — SCREEN 1: RISK OVERVIEW
+==================================================
+
+Add an M3 Risk Overview experience to the existing dashboard.
+
+Display summary cards:
+
+- Total Incidents
+- Critical
+- High
+- Moderate
+- Medium
+- Low
+- Open Incidents
+
+Use:
+
+GET /api/v1/risk/summary
+
+Display risk distribution visually.
+
+Example:
+
+Critical
+High
+Moderate
+Medium
+Low
+
+Use the existing chart library/design language if one already exists.
+
+Also display risk trend/history if returned by the API.
+
+The screen should immediately communicate:
+
+"What is the current security risk situation?"
+
+Do not overcrowd the existing M2 dashboard.
+
+Prefer integrating the M3 overview into the existing dashboard or adding a clearly named M3 Risk Overview route depending on the current architecture.
+
+==================================================
+PHASE 3D — SCREEN 2: PRIORITY INCIDENTS
+==================================================
+
+Create a dedicated Priority Incidents screen.
+
+Use:
+
+GET /api/v1/incidents
+
+Display a professional table with:
+
+- Incident ID
+- Threat Type
+- Risk Score
+- Risk Level
+- Priority
+- Asset
+- User
+- Status
+- Created At
+
+Default ordering:
+
+risk_score DESC
+
+The highest-risk incident should appear first.
+
+Add useful filters:
+
+- Risk Level
+- Threat Type
+- Asset
+- Department
+- MITRE Technique where supported
+- Status
+- Date Range
+
+Add sorting where appropriate.
+
+Make rows clickable.
+
+Clicking an incident should navigate to Incident Investigation.
+
+Use clear visual hierarchy for:
+
+Critical
+High
+Moderate
+Medium
+Low
+
+Do not use excessive animation.
+
+The table must remain usable with hundreds of incidents.
+
+Use pagination if the API supports pagination.
+
+==================================================
+PHASE 3E — SCREEN 3: INCIDENT INVESTIGATION
+==================================================
+
+This is one of the most important M3 screens.
+
+When the user selects an incident:
+
+GET /api/v1/incidents/{incident_id}
+
+Display:
+
+### Incident Header
+
+- Incident ID
+- Threat Type
+- Risk Score
+- Risk Level
+- Priority
+- Status
+
+### Asset Information
+
+- Asset ID
+- Asset Name
+- Asset Type
+- Department
+- Owner
+- Operating System
+- Criticality
+
+### Threat Intelligence
+
+- IOC status
+- IOC value/type
+- Threat name
+- Threat actor
+- IOC confidence/severity
+
+### Vulnerability
+
+- CVE
+- CVSS
+- Vulnerability severity
+- Patch availability/status
+
+### MITRE
+
+- Technique ID
+- Technique name
+- Tactic
+
+### ML Context
+
+- ML confidence
+- M2 prediction/threat type
+- anomaly score where available
+
+### Related Events
+
+Show:
+
+- event IDs
+- timestamps
+- event types
+- users
+- source IP
+- destination IP
+- asset
+
+Do not dump raw JSON onto the screen.
+
+Use structured cards/tables/sections.
+
+==================================================
+PHASE 3F — RISK EXPLAINABILITY
+==================================================
+
+Display the risk breakdown returned by the backend.
+
+Show the five factors:
+
+1. Threat Severity
+2. ML Confidence
+3. Asset Criticality
+4. Vulnerability CVSS
+5. Threat Intelligence
+
+For each display:
+
+- normalized value
+- weight
+- contribution
+
+Example:
+
+Threat Severity
+90 × 25% = 22.5
+
+ML Confidence
+91 × 25% = 22.75
+
+etc.
+
+Also show the final score prominently.
+
+Important:
+
+Do NOT recalculate the score in JavaScript.
+
+Display the backend's actual:
+
+risk_score
+risk_level
+priority
+
+Use a clean visual representation such as:
+
+- factor cards
+- horizontal bars
+- contribution table
+- risk gauge if the existing UI system supports it
+
+The analyst should be able to understand:
+
+"Why did this incident receive this risk score?"
+
+==================================================
+PHASE 3G — RISK REASONS
+==================================================
+
+Display the backend-generated `reasons`.
+
+Example:
+
+- Critical asset
+- High ML confidence
+- Critical CVSS vulnerability
+- Malicious IOC detected
+- Related suspicious events
+
+Use an "Why this is risky" or "Risk Explanation" section.
+
+Do not invent additional reasons in the frontend.
+
+==================================================
+PHASE 3H — ATTACK CHAIN SCREEN
+==================================================
+
+Create an Attack Chain screen/view.
+
+Use:
+
+GET /api/v1/attack-chains
+
+And incident detail data where appropriate.
+
+Display detected chains with:
+
+- Chain type
+- Incident
+- Risk score
+- Asset
+- Ordered stages
+- Event IDs
+- Timeline
+
+Example visual:
+
+Initial Access
+      ↓
+Discovery
+      ↓
+Privilege Escalation
+      ↓
+Execution
+      ↓
+Persistence
+
+Use actual backend stage data.
+
+Do NOT hardcode the example stages.
+
+If the API says there is no attack chain:
+
+Display a clear "No attack chain detected" state.
+
+==================================================
+PHASE 3I — ATTACK CHAIN VISUALIZATION
+==================================================
+
+Implement a clean visual timeline/stepper rather than an unnecessarily complicated graph library unless the existing project already uses one.
+
+Each stage should show:
+
+- stage order
+- stage name
+- event ID
+- event type
+- timestamp
+- MITRE technique where available
+
+Make the chronology obvious.
+
+If there are many events, distinguish:
+
+"Correlated Events"
+
+from:
+
+"Attack Chain Stages"
+
+Do not confuse all correlated events with attack-chain stages.
+
+==================================================
+PHASE 3J — SECURITY INTELLIGENCE
+==================================================
+
+Add a Security Intelligence section/view.
+
+It should expose the security context already returned by the backend:
+
+### CVE / Vulnerability
+- CVE
+- CVSS
+- Severity
+- Patch status
+
+### IOC
+- Indicator
+- Type
+- Match status
+- Threat name
+- Threat actor
+- Confidence
+
+### MITRE
+- Technique
+- Technique ID
+- Tactic
+
+### Asset
+- Asset ID
+- Asset name
+- Criticality
+- OS
+- Department
+
+This can be integrated into Incident Investigation if that produces a cleaner UX.
+
+Do NOT create a completely separate redundant page if the current application architecture makes a contextual panel more appropriate.
+
+==================================================
+PHASE 3K — RECOMMENDATIONS
+==================================================
+
+Use:
+
+GET /api/v1/recommendations/{incident_id}
+
+Display advisory recommendations clearly.
+
+Each recommendation should show:
+
+- action
+- reason
+- priority
+
+Example:
+
+Investigate matched malicious IOC
+→ Indicator is flagged by threat intelligence
+→ Priority: CRITICAL
+
+Make it visually clear that recommendations are:
+
+"Analyst Recommendations"
+
+not automatic actions.
+
+Do not create buttons that imply the dashboard automatically blocks IPs, isolates hosts, disables accounts, or performs destructive actions.
+
+If there is a status update control, it should only update incident lifecycle status.
+
+==================================================
+PHASE 3L — INCIDENT STATUS
+==================================================
+
+If the backend PATCH endpoint is available, allow analysts to change:
+
+Open
+Investigating
+Resolved
+False Positive
+
+Use a dropdown/menu with validation.
+
+After updating:
+
+- refresh incident detail
+- update incident list where necessary
+- show success/error feedback
+
+Do not allow invalid statuses.
+
+==================================================
+PHASE 3M — NAVIGATION
+==================================================
+
+Integrate M3 into the existing navigation.
+
+Suggested structure:
+
+Dashboard
+Events
+Threat Intelligence
+Vulnerabilities
+Predictions
+----------------
+Risk Overview
+Priority Incidents
+Attack Chains
+
+Do not remove existing M1/M2 navigation.
+
+Use the existing sidebar/navigation styling.
+
+Keep naming simple and understandable.
+
+==================================================
+PHASE 3N — UI/UX QUALITY
+==================================================
+
+The M3 frontend must feel like a natural evolution of the existing dashboard.
+
+Follow the current project's:
+
+- typography
+- spacing
+- cards
+- buttons
+- table styles
+- icons
+- colors
+- dark mode
+- light mode
+
+Do not introduce a completely unrelated visual theme.
+
+IMPORTANT:
+The existing project has both dark/light mode considerations.
+
+M3 must work correctly in both.
+
+Do not hardcode colors that break either theme.
+
+Use the existing theme variables/design tokens where available.
+
+==================================================
+PHASE 3O — RESPONSIVENESS
+==================================================
+
+Ensure the M3 screens work at:
+
+- desktop
+- laptop
+- tablet widths
+
+Avoid horizontal overflow where possible.
+
+Tables may scroll horizontally when genuinely necessary.
+
+Do not sacrifice readability just to fit everything on one screen.
+
+==================================================
+PHASE 3P — LOADING / ERROR / EMPTY STATES
+==================================================
+
+Every M3 screen must handle:
+
+Loading:
+Show a professional skeleton/spinner state.
+
+Error:
+Show a clear user-friendly message.
+
+Empty:
+Show a useful empty state such as:
+
+"No incidents found"
+"No attack chains detected"
+"No recommendations available"
+
+Do not show broken/blank components.
+
+==================================================
+PHASE 3Q — PERFORMANCE
+==================================================
+
+The project contains hundreds of incidents.
+
+Do not:
+
+- load all raw security events into React unnecessarily
+- perform expensive filtering in the browser when the API can filter
+- repeatedly request the same incident
+- create unnecessary polling
+- create large rendering loops
+
+Use API pagination/filtering where available.
+
+Use React memoization only where it actually helps.
+
+Keep implementation simple.
+
+==================================================
+PHASE 3R — FRONTEND CODE QUALITY
+==================================================
+
+- Reuse components.
+- Avoid duplicate API calls.
+- Keep pages reasonably modular.
+- Keep API logic outside presentation components.
+- Use existing TypeScript types if the project is TypeScript.
+- Add types for M3 API responses.
+- Avoid `any` unless genuinely unavoidable.
+- Do not put backend business logic into React.
+- Avoid unnecessary dependencies.
+- Follow the existing project conventions.
+
+==================================================
+PHASE 3S — M2 REGRESSION
+==================================================
+
+After M3 frontend integration:
+
+Verify that all existing M1/M2 screens still work.
+
+Specifically verify:
+
+- existing dashboard
+- events
+- threat intelligence
+- vulnerabilities
+- predictions
+- anomalies
+- existing charts
+- existing filters
+- dark mode
+- light mode
+
+Do not remove or break existing functionality.
+
+==================================================
+PHASE 3T — REAL API VALIDATION
+==================================================
+
+Use the actual running backend.
+
+Do NOT use mocked M3 responses for final validation.
+
+Verify:
+
+1. Risk Overview loads real summary data.
+2. Priority Incidents loads real incidents.
+3. Highest-risk incident appears correctly.
+4. Incident detail loads a real incident.
+5. Risk breakdown displays backend values.
+6. Risk reasons display correctly.
+7. Asset/CVE/IOC/MITRE data display correctly.
+8. Attack Chains loads real chains.
+9. Recommendations load real recommendations.
+10. Status update works if implemented.
+11. Filters work.
+12. Navigation works.
+13. Loading/error/empty states work.
+
+Use at least one known real incident such as:
+
+INC-000058
+
+for manual verification.
+
+Verify that it displays:
+
+- Risk Score 94
+- Critical
+- CRITICAL_IMMEDIATE
+- Asset AST005 / Firewall
+- CVSS 9.5
+- Malicious IOC
+- MITRE T1190
+- Privilege Escalation Chain
+- recommendations
+
+Do not hardcode these values.
+They must come from the API.
+
+==================================================
+PHASE 3U — TESTING
+==================================================
+
+Add frontend tests if the existing project has a frontend testing framework.
+
+At minimum test:
+
+- Risk Overview renders summary
+- Priority Incidents renders incidents
+- Risk score/level/priority display
+- Incident detail renders
+- Recommendations render
+- Attack Chain renders
+- empty state
+- API error state
+- status update if implemented
+
+If no frontend test framework exists, do not spend excessive time introducing a large testing infrastructure. Perform thorough manual validation instead and document it.
+
+==================================================
+PHASE 3V — VISUAL REVIEW
+==================================================
+
+After implementation, inspect every new M3 screen visually.
+
+Look for:
+
+- excessive whitespace
+- overcrowded cards
+- unreadable tables
+- inconsistent spacing
+- poor hierarchy
+- broken dark mode
+- broken light mode
+- text overflow
+- horizontal scrolling
+- unclear risk indicators
+- confusing attack-chain presentation
+
+Fix genuine UI issues before finishing.
+
+Do not add unnecessary animations or decorative effects.
+
+The dashboard should look professional enough for a mentor demonstration.
+
+==================================================
+IMPORTANT SCOPE RULE
+==================================================
+
+Implement the required M3 frontend functionality first.
+
+Do NOT spend time on optional advanced features unless the required UI is already complete and stable.
+
+Optional enhancements such as:
+
+- animated attack chains
+- fancy risk gauges
+- advanced transitions
+- analyst feedback workflows
+- dynamic risk weighting UI
+
+are secondary.
+
+==================================================
+FINAL ACCEPTANCE CRITERIA
+==================================================
+
+M3 frontend is complete when an evaluator can perform this flow:
+
+1. Open the dashboard.
+2. See overall risk summary.
+3. Open Priority Incidents.
+4. See incidents ordered by risk.
+5. Select a Critical incident.
+6. See why it is Critical.
+7. See risk factor contributions.
+8. See affected asset.
+9. See CVE/CVSS.
+10. See IOC/threat intelligence.
+11. See MITRE technique.
+12. See correlated events.
+13. See attack chain.
+14. See analyst recommendations.
+15. Change incident status if supported.
+16. Navigate back to the incident list.
+17. Existing M1/M2 functionality still works.
+
+The core demonstration story is:
+
+M2 detected suspicious activity
+        ↓
+M3 enriched the threat
+        ↓
+M3 correlated related events
+        ↓
+M3 calculated risk
+        ↓
+M3 prioritized the incident
+        ↓
+M3 explained why
+        ↓
+M3 identified the attack chain
+        ↓
+M3 recommended analyst actions
+        ↓
+M3 displayed the incident in the dashboard
+
+==================================================
+FINAL REPORT
+==================================================
+
+When complete, provide:
+
+1. Frontend files created
+2. Frontend files modified
+3. Routes/screens added
+4. API integrations added
+5. Components added
+6. M1/M2 components preserved
+7. Tests executed + exact results
+8. Manual validation results
+9. Dark/light mode validation
+10. Responsive validation
+11. Known issues
+12. Optional features not implemented
+13. Any backend changes made and why
+14. Final M3 frontend readiness status
+
+DO NOT start another milestone.
+
+STOP after Phase 3 frontend implementation and validation so the complete M3 system can be reviewed.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-27T22:50:46+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+MILESTONE 3 — FINAL REQUIREMENT GAP FIX
+
+Phase 3 implementation is approved overall.
+
+Do NOT redesign the application.
+Do NOT rewrite existing M1/M2 functionality.
+Do NOT add unnecessary features.
+
+I reviewed the implementation against the actual mentor M3 checklist and identified a few concrete gaps that must be closed before final approval.
+
+==================================================
+1. PRIORITY INCIDENT FILTERS — REQUIRED
+==================================================
+
+The current Priority Incidents screen already has:
+
+- Asset search
+- Risk Level
+- Priority
+- Threat Type
+- Lifecycle Status
+
+Add the remaining mentor-required filters:
+
+- MITRE Technique
+- Date Range
+- Department
+
+Use the existing backend API filtering capabilities where available.
+
+IMPORTANT:
+Do not implement filtering using fake frontend-only data.
+
+If the backend currently lacks one of these filter parameters, make the smallest clean backend/API extension necessary.
+
+Keep filtering server-side where practical.
+
+The mentor-required filter set is:
+
+Risk Level
+Threat Type
+Asset
+Department
+MITRE Technique
+Date Range
+Status
+
+Verify that each filter actually changes the result set.
+
+==================================================
+2. RISK OVERVIEW KPI CARDS — REQUIRED
+==================================================
+
+The Risk Overview currently shows:
+
+Total
+Critical
+High
+Moderate
+Open
+Investigating
+
+Update the KPI area so the required mentor categories are explicitly visible:
+
+- Total Incidents
+- Critical
+- High
+- Moderate
+- Medium
+- Low
+- Open Incidents
+
+Investigating may remain as an additional KPI if space permits.
+
+Do NOT remove useful existing information unnecessarily.
+
+Use the real values returned by:
+
+GET /api/v1/risk/summary
+
+Do not calculate these counts in the frontend.
+
+The Risk Distribution chart should remain unchanged unless needed for consistency.
+
+==================================================
+3. SECURITY INTELLIGENCE — REQUIREMENT VERIFICATION
+==================================================
+
+The current Incident Investigation page already contains:
+
+Security Intelligence
+
+with contextual enrichment.
+
+Verify that it clearly exposes all mentor-required fields:
+
+- CVE
+- CVSS
+- IOC
+- MITRE
+- Threat Actor
+- Affected Asset
+
+If the existing Security Intelligence section clearly satisfies the requirement, KEEP IT AS-IS.
+
+Do NOT create a redundant page simply for the sake of creating another route.
+
+However, if the current implementation does not make Security Intelligence sufficiently discoverable as a complete M3 feature, create a clean dedicated `/dashboard/security-intelligence` view using the existing component/data architecture.
+
+Do not duplicate backend logic or API clients.
+
+==================================================
+4. VERIFY EXISTING M3 FEATURES
+==================================================
+
+While making the above fixes, verify that these remain functional:
+
+Risk Overview
+Risk Distribution
+Risk Trend
+Priority Incidents
+Incident Investigation
+Risk Explainability
+Attack Chain Visualization
+Recommendations
+Filters & Sorting
+API integration
+Incident status updates
+
+Do not regress any of them.
+
+==================================================
+5. VISUAL QUALITY
+==================================================
+
+Use the existing design language.
+
+Maintain:
+
+- dark mode
+- light mode
+- responsive layout
+- existing spacing
+- existing typography
+- existing component styling
+
+Do not introduce a new visual theme.
+
+Ensure the additional KPI cards do not create an overcrowded layout.
+
+On smaller screens they should wrap naturally.
+
+==================================================
+6. FINAL VALIDATION
+==================================================
+
+Run:
+
+npm.cmd run build
+
+Run the frontend integration validation.
+
+Run:
+
+pytest tests/
+
+Verify M1/M2 endpoints still work.
+
+Manually verify:
+
+A. Risk Overview:
+- Total
+- Critical
+- High
+- Moderate
+- Medium
+- Low
+- Open
+- Risk distribution
+- Risk trend
+
+B. Priority Incidents:
+- Risk Level filter
+- Threat Type filter
+- Asset filter
+- Department filter
+- MITRE Technique filter
+- Date Range filter
+- Status filter
+- sorting by risk score
+
+C. Incident Investigation:
+- risk score
+- risk breakdown
+- reasons
+- asset
+- CVE/CVSS
+- IOC
+- MITRE
+- threat actor
+- correlated events
+- attack chain
+- recommendations
+- lifecycle status
+
+D. Attack Chains:
+- real backend data
+- chronological stages
+- event IDs
+- timestamps
+- MITRE context
+
+==================================================
+7. FINAL REPORT
+==================================================
+
+Report only:
+
+1. Files changed
+2. Fixes implemented
+3. Tests/build results
+4. Filter validation results
+5. Risk KPI validation
+6. Security Intelligence validation
+7. M1/M2 regression status
+8. Any remaining known issue
+
+Do NOT begin Milestone 4.
+
+The objective is to close the remaining M3 mentor-checklist gaps and make M3 submission-ready.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-28T23:40:16+05:30.
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+MILESTONE 3 — FINAL BACKEND HARDENING + DOCUMENTATION PASS
+
+M3 implementation is functionally complete.
+
+I independently reviewed the actual project against the M3 mentor requirements. Do NOT redesign M3, add features, or modify the frontend unless required by a backend/schema change.
+
+This is a FINAL SURGICAL PASS.
+
+Fix only the issues listed below, then run the complete regression/validation suite.
+
+==================================================
+1. INCIDENT POPULATION / ELIGIBILITY SEMANTICS
+==================================================
+
+Inspect:
+
+- populate_all_incidents.py
+- incident_service.py
+- incident_repository.py
+- M2 prediction/event schemas
+- Milestone 3 design requirements
+
+Current concern:
+
+populate_all_incidents.py uses a default limit of 1000 and sorts predictions by confidence before processing.
+
+This means the script named `populate_all_incidents` does not necessarily process all relevant M2 predictions.
+
+Determine the intended M3 incident eligibility rule from the existing Milestone 3 specification and implementation.
+
+IMPORTANT:
+Do NOT blindly change the limit to 10,000.
+
+Instead:
+
+1. Determine which M2 predictions/events are supposed to become M3 incidents.
+2. Make the population process cover ALL events/predictions that satisfy that eligibility rule.
+3. Do not arbitrarily select the top 1000 by confidence unless the specification explicitly requires that.
+4. Preserve deduplication/correlation behavior.
+5. Ensure rerunning the population script is deterministic/idempotent.
+6. Do not create duplicate incidents.
+7. Do not alter M2 prediction data.
+
+Document the final eligibility rule clearly.
+
+After the change, report:
+
+- total M2 records examined
+- records eligible for M3
+- incidents created
+- incidents skipped/deduplicated
+- final incident count
+
+==================================================
+2. EVENT → INCIDENT IDENTITY / EXISTING INCIDENT LOOKUP
+==================================================
+
+Inspect:
+
+- incident_service.py
+- incident_repository.py
+- event_ids handling
+- correlation logic
+
+Current concern:
+
+`get_incident_by_event_id()` searches the incident's `event_ids`.
+
+But an incident's `event_ids` may contain correlated events, not only the anchor event.
+
+Therefore an event that is merely RELATED to an existing incident could incorrectly be treated as though it were the anchor event when calling the incident pipeline.
+
+Fix this carefully.
+
+Required behavior:
+
+- Distinguish the INCIDENT ANCHOR EVENT from RELATED/CORRELATED EVENTS.
+- An event appearing only as a related event must not automatically be treated as the incident's anchor.
+- Preserve legitimate deduplication.
+- Preserve existing incident retrieval behavior.
+- Do not break correlation.
+- Do not create duplicate incidents when the same anchor is processed again.
+
+If the existing schema needs an explicit field such as `anchor_event_id`, add it cleanly and consistently.
+
+If an existing field already serves this purpose, reuse it instead of creating a duplicate field.
+
+Update tests for:
+
+1. Same anchor processed twice → same incident.
+2. Related event processed separately → does not incorrectly become the anchor of the existing incident.
+3. Correlated events remain associated with the correct incident.
+4. Existing incidents remain retrievable.
+
+==================================================
+3. RISK BREAKDOWN PRECISION
+==================================================
+
+Inspect:
+
+- models/m3_schemas.py
+- risk/risk_score.py
+- frontend risk breakdown usage
+
+The final risk score must remain an integer.
+
+However, individual factor contributions should preserve mathematical precision.
+
+Current issue:
+
+RiskFactor.contribution is an integer.
+
+Change contribution to a numeric type that can preserve decimals, preferably:
+
+float
+
+The backend should calculate:
+
+Threat Severity contribution
+ML Confidence contribution
+Asset Criticality contribution
+CVSS contribution
+Threat Intelligence contribution
+
+without prematurely rounding each contribution.
+
+Example:
+
+90 × 0.25 = 22.5
+91 × 0.25 = 22.75
+100 × 0.20 = 20.0
+98 × 0.20 = 19.6
+80 × 0.10 = 8.0
+
+Then:
+
+weighted total = 92.85
+final risk score = round(92.85) = 93
+
+IMPORTANT:
+
+- Do NOT change the risk formula.
+- Do NOT change the risk bands.
+- Do NOT change priority mapping.
+- Do NOT change the mentor acceptance score of 93.
+- Only preserve precision in the individual breakdown contributions.
+- Frontend should display the backend-provided values and must not recalculate them.
+
+Update tests accordingly.
+
+==================================================
+4. CREATE / UPDATE MILESTONE 3 DESIGN DOCUMENTATION
+==================================================
+
+Create:
+
+BACKEND/docs/Milestone_3_Design.md
+
+The document must accurately describe the IMPLEMENTED system, not an aspirational design.
+
+Include:
+
+1. Input Data
+2. M2 → M3 data flow
+3. Features / enrichment fields
+4. Asset criticality mapping
+5. CVSS normalization
+6. IOC/threat intelligence normalization
+7. MITRE enrichment
+8. Risk formula
+9. Risk score calculation
+10. Risk bands
+11. Priority mapping
+12. Risk breakdown/explainability
+13. Temporal correlation logic
+14. Attack-chain detection logic
+15. Incident eligibility and creation logic
+16. Incident deduplication
+17. Incident lifecycle
+18. Recommendation logic
+19. MongoDB incidents collection
+20. Important indexes
+21. M3 API endpoints
+22. Frontend screens
+23. Testing strategy
+24. M1/M2 non-regression strategy
+25. Known limitations / deliberate simplifications
+
+Use the actual implementation and actual field names.
+
+Do NOT invent features that do not exist.
+
+==================================================
+5. UPDATE BACKEND README
+==================================================
+
+Update the backend README so it no longer describes the backend as only M1/M2.
+
+Add a concise M3 section covering:
+
+- purpose
+- architecture
+- major components
+- risk engine
+- enrichment
+- correlation
+- attack chains
+- recommendations
+- incidents
+- APIs
+- testing
+
+Keep the existing M1/M2 documentation intact.
+
+Do not rewrite the entire README unnecessarily.
+
+==================================================
+6. TEST DEPENDENCIES / REPRODUCIBILITY
+==================================================
+
+Inspect requirements.txt.
+
+The M3 tests use pytest and mongomock.
+
+Ensure required testing dependencies are explicitly declared in the appropriate dependency file.
+
+Do not add unnecessary packages.
+
+A fresh environment installing the project's declared dependencies should be able to run the M3 test suite.
+
+==================================================
+7. DO NOT CHANGE THESE
+==================================================
+
+Do NOT modify:
+
+- M1 event dataset
+- security_events count
+- M2 prediction logic
+- Isolation Forest model
+- Random Forest/classifier model
+- preprocessor.pkl
+- if_model.pkl
+- clf_model.pkl
+- existing M1/M2 APIs
+- existing M1/M2 frontend functionality
+- M3 risk formula
+- M3 risk bands
+- M3 priority mapping
+
+Do not introduce:
+
+- LLM
+- new ML model
+- dynamic weights
+- automated blocking
+- automated account isolation
+- destructive response actions
+- unnecessary dependencies
+
+==================================================
+8. COMPLETE REGRESSION TEST
+==================================================
+
+After implementing the fixes, run:
+
+Backend:
+
+pytest -q
+
+M3 risk tests:
+
+pytest -q tests/test_risk_engine.py
+
+M3 backend tests:
+
+pytest -q tests/test_m3_backend.py
+
+Run the M3 live validation.
+
+Run existing M1/M2 validation:
+
+- test_api.py
+- validate_demo_ready.py
+- validate_m2_ui_data_integrity.py
+- validate_all_predictions.py
+- validate_temporal_parity.py
+- validate_light_mode.py
+
+If a validation script has a different exact invocation in this project, use the project's existing invocation.
+
+Also run:
+
+npm.cmd run build
+
+==================================================
+9. FINAL DATA SANITY CHECK
+==================================================
+
+After all fixes, inspect a representative set of real incidents.
+
+Verify:
+
+- incident ID
+- anchor event ID
+- related event IDs
+- risk score
+- risk level
+- priority
+- asset
+- CVE/CVSS
+- IOC
+- MITRE
+- attack chain
+- recommendations
+- status
+
+Check specifically:
+
+INC-000058
+
+and at least 9 other real incidents.
+
+Look for:
+
+- incorrect anchor/related event relationships
+- mismatched attack chains
+- incorrect enrichment
+- incorrect risk calculations
+- duplicate incidents
+- inconsistent counts
+
+==================================================
+10. FINAL REPORT
+==================================================
+
+Do NOT simply say "all tests passed."
+
+Provide a concise engineering report containing:
+
+A. Issues found
+B. Exact fixes made
+C. Files changed
+D. Final incident eligibility rule
+E. Final incident count
+F. Anchor-event behavior
+G. Risk contribution precision behavior
+H. Documentation added/updated
+I. Dependencies added/updated
+J. Exact test results
+K. Exact validation results
+L. Build result
+M. Real-data sanity-check result
+N. Any remaining known limitations
+
+MOST IMPORTANT:
+
+If any of the above issues are already correctly handled in the current implementation, DO NOT modify them unnecessarily. Verify and leave them unchanged.
+
+This is the FINAL M3 HARDENING PASS.
+
+Do not start Milestone 4.
+Do not add optional features.
+Do not perform unrelated refactoring.
+
+After successful validation, report whether M3 is ready to FREEZE for submission and demo.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-28T23:58:29+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Gemini 3.7 Flash (High) to Claude Opus 4.6 (Thinking). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+<USER_REQUEST>
+continue what you were doing
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-29T00:09:21+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from Claude Opus 4.6 (Thinking) to Gemini 3.1 Pro (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
